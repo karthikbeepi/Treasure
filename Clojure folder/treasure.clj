@@ -22,12 +22,28 @@
 (readFile "map.txt")
 (println "NoR :" noOfRows "NoC: " noOfCol)
 (def oneString (apply str oneString))
-(println oneString)
+; (println oneString)
 (def arr (to-array oneString)) ;Made into an array
 ; to access a particular value in the array (aget arr 0)
 ; to change a particular value in the array (aset arr 0 "!")
 ; to print the whole array (println (apply str arr))
 
+(defn findPath [ i ]
+  (def res false)
+  (if (or (< i 0)
+          (>= i (* noOfCol noOfRows))
+          (= (str (aget arr 0)) "#")
+          (= (str (aget arr 0)) "!")
+          )
+    res
+    (if (= (str (aget arr 0)) "@")
+      true
+      (aset arr i "+")
+      )
+    )
+  )
+(println (findPath 0))
+(println (apply str arr))
 
 ; (def input_map (slurp "map.txt"))
 ; (def oneString (str/split input_map  #"\n"))
