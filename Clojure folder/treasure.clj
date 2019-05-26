@@ -1,7 +1,7 @@
 (ns treasure.ns)
 (require '[clojure.string :as str]) ; for string function
 
-(def oneString " ") ; already defined as a string 
+(def oneString "") ; already defined as a string 
 (def noOfRows 0)
 
 ;Method for counting noOfCol
@@ -23,7 +23,11 @@
 (println "NoR :" noOfRows "NoC: " noOfCol)
 (def oneString (apply str oneString))
 (println oneString)
- 
+(def arr (to-array oneString)) ;Made into an array
+; to access a particular value in the array (aget arr 0)
+; to change a particular value in the array (aset arr 0 "!")
+; to print the whole array (println (apply str arr))
+
 
 ; (def input_map (slurp "map.txt"))
 ; (def oneString (str/split input_map  #"\n"))
