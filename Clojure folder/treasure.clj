@@ -23,7 +23,7 @@
 (println "NoR :" noOfRows "NoC: " noOfCol)
 (def oneString (apply str oneString))
 (println oneString)
-
+ 
 
 ; (def input_map (slurp "map.txt"))
 ; (def oneString (str/split input_map  #"\n"))
