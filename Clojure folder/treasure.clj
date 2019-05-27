@@ -40,6 +40,15 @@
   (if (= truthVal 0) -1 (+ i 1))
 )
 
+;Method to get up neighbour
+(defn getUp [i]
+  (- i noOfCol)
+  )
+
+;Method to get down neighbour
+(defn getDown [i]
+  (+ i noOfCol))
+
 ;Method to check Boundary Condition
 (defn checkBoundary [i]
   (if (or (< i 0)
@@ -52,53 +61,35 @@
     )
  )
 
-(defn findPath1 [i]
-  (def res false)
-  (if (checkBoundary i)
-    res
-    (if (= (str (aget arr i)) "@")
-      true
-      (do
-        (aset arr i "!")
-        (def up (- i noOfCol))
-        (def down (+ i noOfCol))
-        (def right (getRight i))
-        (def left (getLeft i))
-        (def upRes (findPath up))
-        (def leftRes (findPath left))
-        (def rightRes (findPath right))
-        (def downRes (findPath down))
-        (def res (or upRes downRes leftRes rightRes))
-        (println "Came here" i up left down right upRes leftRes downRes rightRes res)
-        ; (println (findPath 1))
-        (if (= res true)
-          (aset arr i "+"))
-        res))))
 
 ; (println (checkBoundary -1 ))
-;Find the path to @
+; Find the path to @
 (defn findPath [ i ]
-  (def res false)
+  (def res (atom false))
+  false
   (if (checkBoundary i)
-    res
+    false
     (if (= (str (aget arr i)) "@")
       true
       (do
         (aset arr i "!")
-        (def up (- i noOfCol))
-        (def down (+ i noOfCol))
-        (def right (getRight i))
-        (def left (getLeft i))
-        (def upRes (findPath up))
-        (def leftRes (findPath left))
-        (def rightRes (findPath right))
-        (def downRes (findPath down))
-        (def res (or upRes downRes leftRes rightRes))
-        (println "Came here" i up left down right upRes leftRes downRes rightRes res)
+        ; (def up (- i noOfCol))
+        ; (def down (+ i noOfCol))
+        ; (def right (getRight i))
+        ; (def left (getLeft i))
+        (def upRes (findPath (getUp i)))
+        (def leftRes (findPath (getLeft i)))
+        (def rightRes (findPath (getRight i)))
+        (def downRes (findPath (getDown i)))
+        ; (def res (or upRes downRes leftRes rightRes))
+        (println "Came here" i upRes leftRes downRes rightRes res)
         ; (println (findPath 1))
-        (if (= res true)
-          (aset arr i "+"))
-        res)
+        (if (or upRes downRes leftRes rightRes)
+          (do
+            (aset arr i "+")
+            true
+            ))
+        false)
       )
     )
   )
