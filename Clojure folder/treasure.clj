@@ -1,14 +1,16 @@
 (ns treasure.ns)
 (require '[clojure.string :as str]) ; for string function
 
-(def oneString "") ; already defined as a string 
+(def oneString "") ; already defined as a string
 (def noOfRows 0)
 
 ;Method for counting noOfCol
 (defn findRC [file]
   (with-open [rdr (clojure.java.io/reader file)]
     (doseq [line (line-seq rdr)]
-      (def noOfCol (count line)))))
+      (def noOfCol (count line))
+      
+      )))
 ;Method for reading from file character by character
 (defn readFile [file]
   (findRC file)
@@ -20,7 +22,7 @@
 
 ;Program begins from here
 (readFile "map.txt")
-(println "NoR :" noOfRows "NoC: " noOfCol)
+; (println "NoR :" noOfRows "NoC: " noOfCol)
 (def oneString (apply str oneString))
 ; (println oneString)
 (def arr (to-array oneString)) ;Made into an array
@@ -61,38 +63,6 @@
     )
  )
 
-
-; (println (checkBoundary -1 ))
-; Find the path to @
-; (defn findPath [ i ]
-;   false
-;   (if (checkBoundary i)
-;     false
-;     (if (= (str (aget arr i)) "@")
-;       true
-;       (do
-;         (aset arr i "!")
-;         ; (def up (- i noOfCol))
-;         ; (def down (+ i noOfCol))
-;         ; (def right (getRight i))
-;         ; (def left (getLeft i))
-;         (def upRes (findPath (getUp i)))
-;         (def leftRes (findPath (getLeft i)))
-;         (def rightRes (findPath (getRight i)))
-;         (def downRes (findPath (getDown i)))
-;         ; (def res (or upRes downRes leftRes rightRes))
-;         (println "Came here" i upRes leftRes downRes rightRes)
-;         ; (println (findPath 1))
-;         (if (or upRes downRes leftRes rightRes)
-;           (do
-;             (aset arr i "+")
-;             true
-;             ))
-;         false)
-;       )
-;     )
-;   )
-
 (defn checkReached [i]
   (if (checkBoundary i)
     false
@@ -105,27 +75,27 @@
 (defn neighbourReached [i]
   (if (checkBoundary i)
     (do
-      (println "Out of Reach" i)
+      ; (println "Out of Reach" i)
       false)
     (if (checkReached (getDown i))
       (do
-        (println "Reached " i "Down")
+        ; (println "Reached " i "Down")
         true)
       (if (checkReached (getRight i))
         (do
-          (println "Reached " i "Right")
+          ; (println "Reached " i "Right")
           true)
         (if (checkReached (getLeft i))
           (do
-            (println "Reached " i "Left")
+            ; (println "Reached " i "Left")
             true)
           (if (checkReached (getUp i))
             (do
-              (println "Reached " i "Up")
+              ; (println "Reached " i "Up")
               true)
             (if (checkReached i)
               (do
-                (println "Reached " i)
+                ; (println "Reached " i)
                 true)
               false
               )
@@ -167,7 +137,20 @@
       )
     )
   )
+(defn printRes []
+  (def example_var 0)
+  (doseq [n arr]
+    (print n)
+    (def example_var (inc example_var))
+    (if (= (rem example_var noOfCol) 0)
+      (println))))
+(println "This is my challenge:")
+(printRes)
+(if (searchPath 0)
+  (println "Woo hoo, I found the treasure :-) phew!")
+  (println "Uh oh, I could not find the treasure :'( boo")
+  )
+; (def finalStr (apply str arr))
 
-(println (searchPath 0))
-(println (apply str arr))
-
+(printRes)
+; (println (clojure-version))
