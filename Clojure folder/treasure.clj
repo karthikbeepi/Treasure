@@ -19,7 +19,7 @@
       )))
 
 ;Program begins from here
-(readFile "map.txt")
+(readFile "map1.txt")
 (println "NoR :" noOfRows "NoC: " noOfCol)
 (def oneString (apply str oneString))
 ; (println oneString)
@@ -28,33 +28,80 @@
 ; to change a particular value in the array (aset arr 0 "!")
 ; to print the whole array (println (apply str arr))
 
-(defn findPath [ i ]
-  (def res false)
+;Method to get left neighbour
+(defn getLeft [i]
+  (def truthVal (rem i noOfCol))
+  (if (= truthVal 0) -1 (- i 1))
+)
+
+;Method to get right neighbour
+(defn getRight [i]
+  (def truthVal (rem (+ i 1) noOfCol))
+  (if (= truthVal 0) -1 (+ i 1))
+)
+
+;Method to check Boundary Condition
+(defn checkBoundary [i]
   (if (or (< i 0)
           (>= i (* noOfCol noOfRows))
-          (= (str (aget arr 0)) "#")
-          (= (str (aget arr 0)) "!")
+          (= (str (aget arr i)) "#")
+          (= (str (aget arr i)) "!")
           )
+    true
+    false
+    )
+ )
+
+(defn findPath1 [i]
+  (def res false)
+  (if (checkBoundary i)
     res
-    (if (= (str (aget arr 0)) "@")
+    (if (= (str (aget arr i)) "@")
       true
-      (aset arr i "+")
+      (do
+        (aset arr i "!")
+        (def up (- i noOfCol))
+        (def down (+ i noOfCol))
+        (def right (getRight i))
+        (def left (getLeft i))
+        (def upRes (findPath up))
+        (def leftRes (findPath left))
+        (def rightRes (findPath right))
+        (def downRes (findPath down))
+        (def res (or upRes downRes leftRes rightRes))
+        (println "Came here" i up left down right upRes leftRes downRes rightRes res)
+        ; (println (findPath 1))
+        (if (= res true)
+          (aset arr i "+"))
+        res))))
+
+; (println (checkBoundary -1 ))
+;Find the path to @
+(defn findPath [ i ]
+  (def res false)
+  (if (checkBoundary i)
+    res
+    (if (= (str (aget arr i)) "@")
+      true
+      (do
+        (aset arr i "!")
+        (def up (- i noOfCol))
+        (def down (+ i noOfCol))
+        (def right (getRight i))
+        (def left (getLeft i))
+        (def upRes (findPath up))
+        (def leftRes (findPath left))
+        (def rightRes (findPath right))
+        (def downRes (findPath down))
+        (def res (or upRes downRes leftRes rightRes))
+        (println "Came here" i up left down right upRes leftRes downRes rightRes res)
+        ; (println (findPath 1))
+        (if (= res true)
+          (aset arr i "+"))
+        res)
       )
     )
   )
 (println (findPath 0))
 (println (apply str arr))
 
-; (def input_map (slurp "map.txt"))
-; (def oneString (str/split input_map  #"\n"))
-; (println oneString)
-; (println (str (.replaceAll oneString "-" "!")))
-; (defn [sb (String. input_map)]
-;   (println (str (.replace sb "-" "!"))))
-; (def split_map (str/split input_map #"\n"))
-; Access 0th row 3 col (println (nth (nth split_map 0) 3))
-; (def cnt_rows (count split_map))
-; (def single_arr (to-array-2d [(subvec split_map 0 3)]))
-; (aset single_arr 0 1 "k")
-; (println (alength  single_arr))
-; (println (aget single_arr 0 1))
