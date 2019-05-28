@@ -1,31 +1,30 @@
 (ns treasure.ns)
 (require '[clojure.string :as str]) ; for string function
 
+;Bunch of global variables for the program
 (def oneString "") ; already defined as a string
-(def noOfRows 0)
+(def noOfRows 0) ; to store the no of rows in the map
+(def arr (to-array "")) ;to keep an array to access characters
+(def flag (= 0 0)) ;To decide whether the map is suitable for a run or not.
 
-;Method for counting noOfCol
-(defn findRC [file]
-  (with-open [rdr (clojure.java.io/reader file)]
-    (doseq [line (line-seq rdr)]
-      (def noOfCol (count line))
-      
-      )))
 ;Method for reading from file character by character
 (defn readFile [file]
-  (findRC file)
   (with-open [rdr (clojure.java.io/reader file)]
     (doseq [line (line-seq rdr)]
       (def oneString (concat oneString line))
       (def noOfRows (+ noOfRows 1))
+      (def noOfCol (count line))
       )))
 
-;Program begins from here
-(readFile "map.txt")
-; (println "NoR :" noOfRows "NoC: " noOfCol)
-(def oneString (apply str oneString))
-; (println oneString)
-(def arr (to-array oneString)) ;Made into an array
+;Method to check if all the columns are of same length
+(defn chkCol [file]
+  (with-open [rdr (clojure.java.io/reader file)]
+    (doseq [line (line-seq rdr)]
+      (if (not= noOfCol (count line))
+        (def flag (= 0 1)))
+      )
+      ))
+
 ; to access a particular value in the array (aget arr 0)
 ; to change a particular value in the array (aset arr 0 "!")
 ; to print the whole array (println (apply str arr))
@@ -63,6 +62,7 @@
     )
  )
 
+;Method to check if the treasure has been reached
 (defn checkReached [i]
   (if (checkBoundary i)
     false
@@ -71,7 +71,7 @@
       false))
   )
 
-
+;Method to check if the treasure is in the vicinity of the current cell 'i'
 (defn neighbourReached [i]
   (if (checkBoundary i)
     (do
@@ -107,6 +107,7 @@
 ;  (println (checkReached 8))
 ;  (println (neighbourReached 0))
 
+;Actual method to search the path to the treasure
 (defn searchPath [i]
   (if (checkBoundary i)
     false
@@ -137,6 +138,8 @@
       )
     )
   )
+
+;Method to just print the map file to the console
 (defn printRes []
   (def example_var 0)
   (doseq [n arr]
@@ -144,13 +147,29 @@
     (def example_var (inc example_var))
     (if (= (rem example_var noOfCol) 0)
       (println))))
-(println "This is my challenge:")
-(printRes)
-(if (searchPath 0)
-  (println "Woo hoo, I found the treasure :-) phew!")
-  (println "Uh oh, I could not find the treasure :'( boo")
-  )
-; (def finalStr (apply str arr))
 
-(printRes)
+(defn startSearching []
+  ; (println "NoR :" noOfRows "NoC: " noOfCol)
+  (def oneString (apply str oneString))
+; (println oneString)
+  (def arr (to-array oneString)) ;Made into an array
+  (println "This is my challenge:")
+  (printRes)
+  (if (searchPath 0)
+    (println "Woo hoo, I found the treasure :-) phew!")
+    (println "Uh oh, I could not find the treasure :'( boo"))
+; (def finalStr (apply str arr))
+  (printRes)
+  )
+
+;Program begins from here
+(defn mainStart []
+ (readFile "map.txt")
+ (chkCol "map.txt")
+ (if (= flag true)
+   (startSearching)
+   (println "Map format incorrect")
+   )
 ; (println (clojure-version))
+ )
+(mainStart)
