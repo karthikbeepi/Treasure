@@ -56,10 +56,12 @@
           (>= i (* noOfCol noOfRows))
           (= (str (aget arr i)) "#")
           (= (str (aget arr i)) "!")
-          (not= (str (aget arr i)) "-")
+          ; (not= (str (aget arr i)) "-")
           )
     true
-    false
+    (if (or (= (str (aget arr i)) "-")
+            (= (str (aget arr i)) "@")
+            ) false true)
     )
  )
 
