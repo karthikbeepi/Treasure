@@ -13,17 +13,14 @@
     (doseq [line (line-seq rdr)]
       (def oneString (concat oneString line))
       (def noOfRows (+ noOfRows 1))
-      (def noOfCol (count line))
-      )))
+      (def noOfCol (count line)))))
 
 ;Method to check if all the columns are of same length
 (defn chkCol [file]
   (with-open [rdr (clojure.java.io/reader file)]
     (doseq [line (line-seq rdr)]
       (if (not= noOfCol (count line))
-        (def flag (= 0 1)))
-      )
-      ))
+        (def flag (= 0 1))))))
 
 ; to access a particular value in the array (aget arr 0)
 ; to change a particular value in the array (aset arr 0 "!")
@@ -32,19 +29,16 @@
 ;Method to get left neighbour
 (defn getLeft [i]
   (def truthVal (rem i noOfCol))
-  (if (= truthVal 0) -1 (- i 1))
-)
+  (if (= truthVal 0) -1 (- i 1)))
 
 ;Method to get right neighbour
 (defn getRight [i]
   (def truthVal (rem (+ i 1) noOfCol))
-  (if (= truthVal 0) -1 (+ i 1))
-)
+  (if (= truthVal 0) -1 (+ i 1)))
 
 ;Method to get up neighbour
 (defn getUp [i]
-  (- i noOfCol)
-  )
+  (- i noOfCol))
 
 ;Method to get down neighbour
 (defn getDown [i]
@@ -55,14 +49,10 @@
   (if (or (< i 0)
           (>= i (* noOfCol noOfRows))
           (= (str (aget arr i)) "#")
-          (= (str (aget arr i)) "!")
-          )
+          (= (str (aget arr i)) "!"))
     true
     (if (or (= (str (aget arr i)) "-")
-            (= (str (aget arr i)) "@")
-            ) false true)
-    )
- )
+            (= (str (aget arr i)) "@")) false true)))
 
 ;Method to check if the treasure has been reached
 (defn checkReached [i]
@@ -70,8 +60,7 @@
     false
     (if (= (str (aget arr i)) "@")
       true
-      false))
-  )
+      false)))
 
 ;Method to check if the treasure is in the vicinity of the current cell 'i'
 (defn neighbourReached [i]
@@ -99,12 +88,7 @@
               (do
                 ; (println "Reached " i)
                 true)
-              false
-              )
-            )
-          )
-        )))
-  )
+              false)))))))
 
 ;  (println (checkReached 8))
 ;  (println (neighbourReached 0))
@@ -116,30 +100,27 @@
     (if (checkReached i)
       true
       (do  (aset arr i "!")
-(if (neighbourReached i)
-  (do
-    (aset arr i "+")
-    true)
-  (if (searchPath (getDown i))
-    (do
-      (aset arr i "+")
-      true)
-    (if (searchPath (getLeft i))
-      (do
-        (aset arr i "+")
-        true)
-      (if (searchPath (getUp i))
-        (do
-          (aset arr i "+")
-          true)
-        (if (searchPath (getRight i))
-          (do
-            (aset arr i "+")
-            true)
-          false))))) )
-      )
-    )
-  )
+           (if (neighbourReached i)
+             (do
+               (aset arr i "+")
+               true)
+             (if (searchPath (getDown i))
+               (do
+                 (aset arr i "+")
+                 true)
+               (if (searchPath (getLeft i))
+                 (do
+                   (aset arr i "+")
+                   true)
+                 (if (searchPath (getUp i))
+                   (do
+                     (aset arr i "+")
+                     true)
+                   (if (searchPath (getRight i))
+                     (do
+                       (aset arr i "+")
+                       true)
+                     false)))))))))
 
 ;Method to just print the map file to the console
 (defn printRes []
@@ -153,25 +134,29 @@
 (defn startSearching []
   ; (println "NoR :" noOfRows "NoC: " noOfCol)
   (def oneString (apply str oneString))
-; (println oneString)
-  (def arr (to-array oneString)) ;Made into an array
-  (println "This is my challenge:")
-  (printRes)
-  (if (searchPath 0)
-    (println "Woo hoo, I found the treasure :-) phew!")
-    (println "Uh oh, I could not find the treasure :'( boo"))
+  (if (clojure.string/blank? oneString)
+    (println "Empty file!")
+    (do
+      (def arr (to-array oneString)) ;Made into an array
+      (println "This is my challenge:")
+      (printRes)
+      (if (searchPath 0)
+        (println "Woo hoo, I found the treasure :-) phew!")
+        (println "Uh oh, I could not find the treasure :'( boo"))
 ; (def finalStr (apply str arr))
-  (printRes)
+      (printRes)))
+; (println oneString)
   )
 
 ;Program begins from here
 (defn mainStart []
- (readFile "map.txt")
- (chkCol "map.txt")
- (if (= flag true)
-   (startSearching)
-   (println "Map format incorrect")
-   )
+  (if (.exists (clojure.java.io/file "map.txt"))
+    (do
+      (readFile "map.txt")
+      (chkCol "map.txt")
+      (if (= flag true)
+        (startSearching)
+        (println "Map format incorrect"))) (println "File not found! Please provide a map.txt with a valid map!!!"))
 ; (println (clojure-version))
- )
+  )
 (mainStart)
